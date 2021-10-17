@@ -1,7 +1,6 @@
 import platform
 import pathlib
 
-# import pyaudio
 import speech_recognition as sr
 import nltk
 from nltk.stem import WordNetLemmatizer
@@ -27,7 +26,7 @@ SetLogLevel(-1)
 p = platform.system()
 
 
-class Speech2Command:
+class Speech2Text:
     def __init__(
         self, mode=None, loc=None, src=None, output=f"{int(time())}.txt", config={}
     ):
@@ -149,7 +148,7 @@ class Speech2Command:
                 print("\n\nExit command triggered from Keyboard! Exiting...")
 
 
-def driver():
+def driver_speech2text():
     loc = None
     source = None
     while True:
@@ -190,7 +189,7 @@ def driver():
         config_instance = Config(loc=config_file).get_config()
     else:
         config_instance = Config().get_config()
-    instance = Speech2Command(
+    instance = Speech2Text(
         mode=mode, loc=loc, src=source, output=output_file, config=config_instance
     )
     instance.exec()
@@ -221,10 +220,10 @@ def test():
         TARGET_VOSK = f"{OUTPUT_DIR}/test_run_vosk_{tm}.txt"
         TARGET_GOOGLE = f"{OUTPUT_DIR}/test_run_google_{tm}.txt"
 
-        test_inst_vosk = Speech2Command(
+        test_inst_vosk = Speech2Text(
             mode="rec", loc=TEST_FILES[i], src="vosk", output=TARGET_VOSK
         )
-        test_inst_google = Speech2Command(
+        test_inst_google = Speech2Text(
             mode="rec", loc=TEST_FILES[i], src="google", output=TARGET_GOOGLE
         )
 
@@ -258,10 +257,11 @@ def test():
     while(len(OUTPUT_FILES) > 0):
         os.remove(OUTPUT_FILES[-1])
 
-n = list(sys.argv)
+if __name__ == "__main__":
+    n = list(sys.argv)
 
-if len(n) > 1: 
-    if sys.argv[1] == "--test":
-        test()
-else:
-    driver()
+    if len(n) > 1: 
+        if sys.argv[1] == "--test":
+            test()
+    else:
+        driver()
