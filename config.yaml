@@ -1,0 +1,20 @@
+{
+  "triggers": {
+    "exit": ['stop', 'exit', 'bye', 'quit', 'terminate', 'kill', 'end']
+  },
+  "pyxl": {
+    "relative": {
+      "up": "pass",
+      "down": "pass",
+      "left": "pass",
+      "right": "pass",
+    },
+    "absolute": {
+      "top": "pass",
+      "bottom": "pass",
+      "first": "pass",
+      "last": "pass",
+    },
+    "open": "pass"
+  }
+}

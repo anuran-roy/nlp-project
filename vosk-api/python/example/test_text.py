@@ -6,8 +6,10 @@ import json
 import os
 
 if not os.path.exists("model"):
-    print ("Please download the model from https://alphacephei.com/vosk/models and unpack as 'model' in the current folder.")
-    exit (1)
+    print(
+        "Please download the model from https://alphacephei.com/vosk/models and unpack as 'model' in the current folder."
+    )
+    exit(1)
 
 
 model = Model("model")
@@ -16,10 +18,10 @@ model = Model("model")
 rec = KaldiRecognizer(model, 16000)
 
 # You can also specify the possible word list
-#rec = KaldiRecognizer(model, 16000, "zero oh one two three four five six seven eight nine")
+# rec = KaldiRecognizer(model, 16000, "zero oh one two three four five six seven eight nine")
 
 wf = open(sys.argv[1], "rb")
-wf.read(44) # skip header
+wf.read(44)  # skip header
 
 while True:
     data = wf.read(4000)
@@ -27,7 +29,7 @@ while True:
         break
     if rec.AcceptWaveform(data):
         res = json.loads(rec.Result())
-        print (res['text'])
+        print(res["text"])
 
 res = json.loads(rec.FinalResult())
-print (res['text'])
+print(res["text"])

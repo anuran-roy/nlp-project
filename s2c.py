@@ -1,10 +1,13 @@
 import platform
+
 # import pyaudio
 import speech_recognition as sr
 import nltk
 from nltk.stem import WordNetLemmatizer
+
 # from nltk import tokenize as tk
 from nltk.corpus import stopwords, wordnet
+
 # from operator import itemgetter
 # import math
 # import pocketsphinx
@@ -29,6 +32,7 @@ def output(text):
     # f = open("text.txt", "w+")
     f.write(f"\n{text}")
 
+
 def listen():
     rec = sr.Recognizer()
     with sr.Microphone() as src:
@@ -42,7 +46,7 @@ def listen():
         print(f"\n\n{e}\n\n")
         print("Sorry, couldn't hear. Mind trying typing it?")
         cmd = input()
-    # cmd=cmd.split(" ")
+        # cmd=cmd.split(" ")
         return json.dumps({"text": cmd})
 
 
@@ -52,13 +56,13 @@ def listen():
 
 
 def pos_tagger(tag):
-    if tag.startswith('J'):
+    if tag.startswith("J"):
         return wordnet.ADJ
-    elif tag.startswith('V'):
+    elif tag.startswith("V"):
         return wordnet.VERB
-    elif tag.startswith('N'):
+    elif tag.startswith("N"):
         return wordnet.NOUN
-    elif tag.startswith('R'):
+    elif tag.startswith("R"):
         return wordnet.ADV
     else:
         return None
@@ -78,16 +82,16 @@ def lemmatizer(src):
 
 
 def make_tokens(lms):
-    stop_words = set(stopwords.words('english')) # +['Maryam']-['ok'])
+    stop_words = set(stopwords.words("english"))  # +['Maryam']-['ok'])
     src3 = []
     for i in lms:
         if i in stop_words:
             pass
         else:
-            src3.append(str(i)+" ")
-    print("Keywords are:", end=' ')
+            src3.append(str(i) + " ")
+    print("Keywords are:", end=" ")
     for i in src3:
-        print(i, end=' ')
+        print(i, end=" ")
 
 
 try:
@@ -96,12 +100,20 @@ try:
     while True:
         print("\nSay some words: ")
         c = listen()
-        print("Listened value=",c)
+        print("Listened value=", c)
         d = json.loads(c)
         print(f'\n\nCommand ={d["text"]}\n\n')
         print("\nWriting to the file...\n")
         output(d["text"])
-        if str(d["text"]).rstrip(" ").lower() in ['stop', 'exit', 'bye', 'quit', 'terminate', 'kill', 'end']:
+        if str(d["text"]).rstrip(" ").lower() in [
+            "stop",
+            "exit",
+            "bye",
+            "quit",
+            "terminate",
+            "kill",
+            "end",
+        ]:
             print("\n\nExit command triggered from command! Exiting...")
             sys.exit()
         lemmatized = lemmatizer(d["text"])

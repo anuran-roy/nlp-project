@@ -8,4 +8,4 @@ model = Model("model")
 rec = KaldiRecognizer(model, 8000)
 
 res = json.loads(rec.FinalResult())
-print (res)
+print(res)
