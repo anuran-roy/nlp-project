@@ -1,7 +1,5 @@
 {
-  "triggers": {
-    "exit": ['stop', 'exit', 'bye', 'quit', 'terminate', 'kill', 'end']
-  },
+    "exit": ['stop', 'exit', 'bye', 'quit', 'terminate', 'kill', 'end'],
   # "pyxl": {
   #   "relative": {
   #     "up": "pass",
@@ -17,4 +15,8 @@
   #   },
   #   "open": "pass"
   # }
+  "move": "navigate",
+  "open": "",
+  "enter": "setValue",
+  "get": "getCell"
 }

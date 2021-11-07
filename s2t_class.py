@@ -264,4 +264,4 @@ if __name__ == "__main__":
         if sys.argv[1] == "--test":
             test()
     else:
-        driver()
+        driver_speech2text()
