@@ -63,42 +63,42 @@ class Speech2Text:
     #     sp = pocketsphinx.LiveSpeech()
     #     return sp
 
-    def pos_tagger(self, tag):
-        if tag.startswith("J"):
-            return wordnet.ADJ
-        elif tag.startswith("V"):
-            return wordnet.VERB
-        elif tag.startswith("N"):
-            return wordnet.NOUN
-        elif tag.startswith("R"):
-            return wordnet.ADV
-        else:
-            return None
+    # def pos_tagger(self, tag):
+    #     if tag.startswith("J"):
+    #         return wordnet.ADJ
+    #     elif tag.startswith("V"):
+    #         return wordnet.VERB
+    #     elif tag.startswith("N"):
+    #         return wordnet.NOUN
+    #     elif tag.startswith("R"):
+    #         return wordnet.ADV
+    #     else:
+    #         return None
 
-    def lemmatizer(self, src):
-        w = WordNetLemmatizer()
-        pos_tagged = nltk.pos_tag(nltk.word_tokenize(src))
-        wn_tagged = list(map(lambda x: (x[0], self.pos_tagger(x[1])), pos_tagged))
-        ls = []  # lemmatized sentence
-        for word, tag in wn_tagged:
-            if tag is None:
-                ls.append(word)
-            else:
-                ls.append(w.lemmatize(word, tag))
-        return ls
+    # def lemmatizer(self, src):
+    #     w = WordNetLemmatizer()
+    #     pos_tagged = nltk.pos_tag(nltk.word_tokenize(src))
+    #     wn_tagged = list(map(lambda x: (x[0], self.pos_tagger(x[1])), pos_tagged))
+    #     ls = []  # lemmatized sentence
+    #     for word, tag in wn_tagged:
+    #         if tag is None:
+    #             ls.append(word)
+    #         else:
+    #             ls.append(w.lemmatize(word, tag))
+    #     return ls
 
-    def make_tokens(self, lms):
-        stop_words = set(stopwords.words("english"))
-        src3 = []
-        for i in lms:
-            if i in stop_words:
-                pass
-            else:
-                src3.append(str(i) + " ")
-        print("Keywords are:", end=" ")
-        for i in src3:
-            print(i, end=" ")
-        print("\n\n")
+    # def make_tokens(self, lms):
+    #     stop_words = set(stopwords.words("english"))
+    #     src3 = []
+    #     for i in lms:
+    #         if i in stop_words:
+    #             pass
+    #         else:
+    #             src3.append(str(i) + " ")
+    #     print("Keywords are:", end=" ")
+    #     for i in src3:
+    #         print(i, end=" ")
+    #     print("\n\n")
 
     def save(self, data):
         # f = open(self.output, "a")
