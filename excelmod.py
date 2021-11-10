@@ -7,7 +7,7 @@ import os
 
 class ModExcel:
     def __init__(self, path="samples/samples.xlsx", config=Config().get_config()):
-        # self.loc = loc
+        self.path = path
         self.workbook = openpyxl.load_workbook(path)
         self.row = 1
         self.col = 1
@@ -44,12 +44,15 @@ class ModExcel:
         #     return None
 
     def setValue(self, cmd):
-        val = cmd
+        val = cmd[0]
         cell = self.getCell()
         try:
             cell.value = val
+            print("\n\nModified the concerned excel file.\n\n")
+            self.workbook.save(self.path)
             return True
         except:
+            print("\n\nCouldn't modify the concerned excel file.\n\n")
             return False
 
 def parsecmd(cmd):
