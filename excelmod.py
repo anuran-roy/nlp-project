@@ -1,5 +1,4 @@
 from settings import Config
-# from pathlib import path
 from s2t_class import Speech2Text
 import openpyxl
 import json
