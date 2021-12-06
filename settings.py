@@ -18,6 +18,7 @@ class Config:
     def get_config(self):
         return self.read_config()
 
+
 if __name__ == "__main__":
     print(Config().get_config())
 

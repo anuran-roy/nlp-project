@@ -226,10 +226,13 @@ def test():
         test_inst_google = Speech2Text(
             mode="rec", loc=TEST_FILES[i], src="google", output=TARGET_GOOGLE
         )
-
+        print(f"\n\n==================\nIteration:\t{i+1}\n==================")
+        print(f"\n\nRecognizing **{TEST_FILES[i][TEST_FILES[i].rindex('/')+1:]}** with Google...")
         test_inst_google.exec()
+        print("\n========================================================================\n")
+        print(f"\n\nRecognizing **{TEST_FILES[i][TEST_FILES[i].rindex('/')+1:]}** with Vosk...")
         test_inst_vosk.exec()
-
+        print("\n========================================================================\n")
         test_inst_google.file.close()
         test_inst_vosk.file.close()
 
@@ -241,7 +244,10 @@ def test():
         # print(t2, end="\n\n")
 
         avg += metrics(str(t1), str(t2))
-        print("Similarity in the recognition of the two voice packs:", metrics(str(t1), str(t2)))
+        print(
+            "Similarity in the recognition of the two voice packs:",
+            metrics(str(t1), str(t2)),
+        )
 
         del test_inst_google
         del test_inst_vosk
@@ -254,13 +260,15 @@ def test():
 
     OUTPUT_FILES = [str(f) for f in pathlib.Path(OUTPUT_DIR).iterdir() if f.is_file()]
 
-    while(len(OUTPUT_FILES) > 0):
+    while len(OUTPUT_FILES) > 0:
         os.remove(OUTPUT_FILES[-1])
+        OUTPUT_FILES = OUTPUT_FILES[:-1]
+
 
 if __name__ == "__main__":
     n = list(sys.argv)
 
-    if len(n) > 1: 
+    if len(n) > 1:
         if sys.argv[1] == "--test":
             test()
     else:
