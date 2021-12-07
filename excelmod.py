@@ -57,7 +57,6 @@ class ModExcel:
             print(f"\n\n\n\nCurrent workbook is {self.getSheet()}\n\n\n\n")
 
     def navigate(self, args):
-        # try:
         for i in args:
             if i.lower() == "right":
                 print("\n\nMoving one column right\n\n")
@@ -74,10 +73,6 @@ class ModExcel:
             else:
                 print("Sorry, command not recognized :(")
 
-        # self.getCell()
-        # except:
-        #     return None
-
     def setValue(self, cmd):
         val = cmd[0]
         cell = self.getCell()
@@ -93,9 +88,6 @@ class ModExcel:
 
 def parsecmd(cmd):
     # Enter ABCD and move left and down and get cell and value
-    # import json
-
-    # a = input("\n\nEnter a string to generate the tree of:\n\n")
 
     tree = [[y.strip() for y in x.strip().split()] for x in cmd.split("and ")]
     tree2 = []
@@ -127,7 +119,7 @@ def parsecmd(cmd):
             arg = " and ".join(i[1:])
             tpl = tuple((keyword, arg))
 
-        else:  # if i[0] == 'move':
+        else:
             keyword = i[0]
             arg = i[1:]
             tpl = []
@@ -149,7 +141,6 @@ def parsecmd(cmd):
 
 
 def execute(xl, cfg, parsed_tree):
-    # parsed_tree = parsecmd(text)
     commands = list([x[0] for x in parsed_tree])
     attributes = list([x[1] for x in parsed_tree])
 
@@ -164,11 +155,7 @@ def execute(xl, cfg, parsed_tree):
         if commands[i] in cfg.keys():
             print(f"\n\nCommand recognized: {commands[i]}.")
             print(f"Parameters: {attributes[i]}\n\n")
-            # if commands[i] not in ["get"]:
             cmd = f"xl.{cfg[commands[i]]}(['{attributes[i]}'])"
-
-            # else:
-            #     cmd = f"xl.{cfg[commands[i]]}()"
 
             print(f"\n\nBuilt command: {cmd}\n\n")
             exec(cmd)
@@ -180,10 +167,8 @@ def execute(xl, cfg, parsed_tree):
 
 def driver_excelmod():
     s2t = Speech2Text(mode="mic", src="vosk", output="a_test.txt")
-    # s2t = Speech2Text(mode="rec", src="vosk", output="a_test.txt")
     cfg = Config().get_config()
     xl = ModExcel(config=cfg)
-    cmd = None
 
     while True:
         try:
@@ -194,35 +179,6 @@ def driver_excelmod():
             print(f"\n\nCommand given: {text}\n\n")
 
             execute(xl, cfg, parsecmd(text))
-            # parsed_tree = parsecmd(text)
-            # commands = list([x[0] for x in parsed_tree])
-            # attributes = list([x[1] for x in parsed_tree])
-
-            # print(f"\n\nParsed syntax: {parsed_tree}\n\n")
-            # print(f"\n\nParsed commands: {commands}\n\n")
-
-            # print("\n\nConfiguration available:\n\n")
-            # for i in cfg.keys():
-            #     print(f"{i}\t{cfg[i]}")
-
-            # Execution block
-            # execute(commands, attributes, cfg)
-            # for i in range(len(commands)):
-            #     if commands[i] in cfg.keys():
-            #         print(f"\n\nCommand recognized: {commands[i]}.")
-            #         print(f"Parameters: {attributes[i]}\n\n")
-            #         # if commands[i] not in ["get"]:
-            #         cmd = f"xl.{cfg[commands[i]]}(['{attributes[i]}'])"
-
-            #         # else:
-            #         #     cmd = f"xl.{cfg[commands[i]]}()"
-
-            #         print(f"\n\nBuilt command: {cmd}\n\n")
-            #         exec(cmd)
-            #     else:
-            #         print(
-            #             f"\n\nCommand {commands[i]} isn't valid... \n\n"
-            #         )
         except Exception as e:
             traceback.print_exc()
             print("\n\nAn error occured. Error details: \t", e)
@@ -247,7 +203,6 @@ def test_excelmod():
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        # test()
         test_excelmod()
     else:
         driver_excelmod()
