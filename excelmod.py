@@ -10,11 +10,11 @@ import os
 class ModExcel:
     def __init__(self, path="samples/samples.xlsx",
                  config=Config().get_config()):
-        self.path = path
+        self.path: str = path
         self.workbook = openpyxl.load_workbook(path)
-        self.row = 1
-        self.col = 1
-        self.config = config
+        self.row: int = 1
+        self.col: int = 1
+        self.config: dict = config
         self.sheet = self.workbook.active
 
     def getSheet(self):
@@ -26,11 +26,11 @@ class ModExcel:
         except Exception:
             return None
 
-    def locate(self, *args):
-        flag = 0
+    def locate(self, *args) -> list:
+        flag: int = 0
         for i in range(1, self.sheet.max_row + 1):
             for j in range(1, self.sheet.max_column + 1):
-                for k in args:
+                for k in args[0]:
                     cv = self.sheet.cell(row=i, column=j)
                     if k in cv.value:
                         print(
@@ -43,21 +43,29 @@ class ModExcel:
             print("\n\nSorry, no result found.\n\n")
 
     def getDetails(self, *args):
-        if args[0] == "address":
-            print(
-                f"\n\nCurrent cell address is {self.getCell().coordinate}\n\n"
-            )
-            return self.getCell().coordinate
-        elif args[0] == "value":
-            print(f"\n\nCurrent cell value is {self.getCell().value}\n\n")
-            return self.getCell().value
-        elif args[0] == "sheet":
-            print(f"\n\n\n\nCurrent sheet is {self.getSheet()}\n\n\n\n")
-        elif args[0] == "workbook":
-            print(f"\n\n\n\nCurrent workbook is {self.getSheet()}\n\n\n\n")
+        # print("\n\ngetDetails() invoked!\n\n")
+        # print(f"Arguments = {args}")
+        cell = self.getCell()
 
-    def navigate(self, args):
-        for i in args:
+        if cell is not None:
+            if ["address"] in args:
+                print(
+                    f"\n\nCurrent cell address is {cell.coordinate}\n\n"
+                )
+                # return self.getCell().coordinate
+            elif ["value"] in args:
+                print(f"\n\nCurrent cell value is {cell.value}\n\n")
+                # return self.getCell().value
+            elif ["sheet"] in args:
+                print(f"\n\n\n\nCurrent sheet is {self.getSheet()}\n\n\n\n")
+            elif ["workbook"] in args:
+                print(f"\n\n\n\nCurrent workbook is {self.getSheet()}\n\n\n\n")
+        else:
+            print(f"\n\nRow {self.row}, Column {self.col} is an invalid address.")
+            print(f"For this worksheet, rows lie in the range [1,{self.sheet.max_row}], and columns lie in the range [1,{self.sheet.max_column}]\n\n")
+
+    def navigate(self, *args):
+        for i in args[0]:
             if i.lower() == "right":
                 print("\n\nMoving one column right\n\n")
                 self.col += 1
@@ -73,7 +81,7 @@ class ModExcel:
             else:
                 print("Sorry, command not recognized :(")
 
-    def setValue(self, cmd):
+    def setValue(self, cmd: list):
         val = cmd[0]
         cell = self.getCell()
         try:
@@ -86,11 +94,11 @@ class ModExcel:
             return False
 
 
-def parsecmd(cmd):
-    # Enter ABCD and move left and down and get cell and value
+def parsecmd(cmd: str) -> list:
+    # Enter ABCD and move right and down and get address and value
 
-    tree = [[y.strip() for y in x.strip().split()] for x in cmd.split("and ")]
-    tree2 = []
+    tree: list = [[y.strip() for y in x.strip().split()] for x in cmd.split("and ")]
+    tree2: list = []
 
     for i in range(len(tree)):
         if len(tree[i]) == 1:
@@ -107,9 +115,9 @@ def parsecmd(cmd):
 
     print(f"\n\nCrudely Parsed Tree: {tree2}")
 
-    tree3 = []
+    tree3: list = []
 
-    keyword = None
+    keyword: str = ""
     arg = None
     tpl = None
 
@@ -141,8 +149,8 @@ def parsecmd(cmd):
 
 
 def execute(xl, cfg, parsed_tree):
-    commands = list([x[0] for x in parsed_tree])
-    attributes = list([x[1] for x in parsed_tree])
+    commands: list = list([x[0] for x in parsed_tree])
+    attributes: list = list([x[1] for x in parsed_tree])
 
     print(f"\n\nParsed syntax: {parsed_tree}\n\n")
     print(f"\n\nParsed commands: {commands}\n\n")
@@ -167,15 +175,15 @@ def execute(xl, cfg, parsed_tree):
 
 def driver_excelmod():
     s2t = Speech2Text(mode="mic", src="vosk", output="a_test.txt")
-    cfg = Config().get_config()
+    cfg: dict = Config().get_config()
     xl = ModExcel(config=cfg)
 
     while True:
         try:
             if s2t.src == "vosk":
-                text = json.loads(s2t.listen())["text"]
+                text: str = json.loads(s2t.listen())["text"]
             elif s2t.src == "google":
-                text = s2t.listen()
+                text: str = s2t.listen()
             print(f"\n\nCommand given: {text}\n\n")
 
             execute(xl, cfg, parsecmd(text))
@@ -192,9 +200,9 @@ def test_excelmod():
         output="/media/anuran/Samsung SSD 970 EVO 1TB/Projects/NLP Project/tests/output/random_test.txt"
     )
 
-    text = json.loads(test_inst_vosk.listen())["text"]
+    text: str = json.loads(test_inst_vosk.listen())["text"]
 
-    cfg = Config().get_config()
+    cfg: dict = Config().get_config()
     xl = ModExcel(config=cfg)
 
     execute(xl, cfg, parsecmd(text))

@@ -18,14 +18,14 @@ p = platform.system()
 
 class Speech2Text:
     def __init__(
-        self, mode=None, loc=None, src=None, output=f"{int(time())}.txt", config={}
-    ):
-        self.mode = mode
-        self.loc = loc
-        self.src = src
+        self, mode: str = "", loc: str = "", src: str = "", output: str = f"{int(time())}.txt", config: dict = {}
+    ) -> None:
+        self.mode: str = mode
+        self.loc: str = loc
+        self.src: str = src
         self.cmd = None
         self.output = output
-        self.config = config
+        self.config: dict = config
         self.file = open(self.output, "a")
 
     def listen(self):
@@ -48,10 +48,10 @@ class Speech2Text:
             self.cmd = input()
         return self.cmd
 
-    def save(self, data):
+    def save(self, data) -> None:
         self.file.write(data + " ")
 
-    def exec(self):
+    def exec(self) -> None:
         print(
             f"\n\nSOURCE: {self.loc}, TRANSLATOR: {self.src}, MODE={self.mode}, OUTPUT FILE: {self.output}\n\n"
         )
@@ -91,11 +91,11 @@ class Speech2Text:
                 print("\n\nExit command triggered from Keyboard! Exiting...")
 
 
-def driver_speech2text():
-    loc = None
-    source = None
+def driver_speech2text() -> None:
+    loc: str = ""
+    source: str = ""
     while True:
-        mode = input("Enter mode: ('mic' for microphone or 'rec' for recording)\n")
+        mode: str = input("Enter mode: ('mic' for microphone or 'rec' for recording)\n")
         print("\n")
         if mode == "mic":
             break
@@ -113,7 +113,7 @@ def driver_speech2text():
             print("\nInvalid mode.Try again\n")
 
     while True:
-        source = input("Enter translator: ('vosk' for Vosk or 'google' for Google)\n")
+        source: str = input("Enter translator: ('vosk' for Vosk or 'google' for Google)\n")
         print("\n")
         if source == "google":
             break
@@ -123,15 +123,15 @@ def driver_speech2text():
             print("\nInvalid translator.Try again\n")
 
     print("\nEnter output file location:")
-    output_file = input()
+    output_file: str = input()
 
     print("\nEnter config file location:")
-    config_file = input()
+    config_file: str = input()
 
     if len(config_file) >= 6:
-        config_instance = Config(loc=config_file).get_config()
+        config_instance: dict = Config(loc=config_file).get_config()
     else:
-        config_instance = Config().get_config()
+        config_instance: dict = Config().get_config()
     instance = Speech2Text(
         mode=mode, loc=loc, src=source, output=output_file, config=config_instance
     )
@@ -139,34 +139,34 @@ def driver_speech2text():
     instance.file.close()
 
 
-def metrics(text1, text2):
-    l1 = text1.split(" ")
-    l2 = text2.split(" ")
+def metrics(text1: str, text2: str) -> float:
+    l1: list = text1.split(" ")
+    l2: list = text2.split(" ")
 
     # print(l1, l2)
-    metric = len(set(l2) - set(l1)) / len(set(l2))
+    metric: float = len(set(l2) - set(l1)) / len(set(l2))
 
     return 100 * (1 - metric)
 
 
-def test():
-    avg = 0
+def test() -> None:
+    avg: float = 0
 
     BASE_DIR = os.getcwd()
-    OUTPUT_DIR = f"{BASE_DIR}/tests/output"
-    INPUT_DIR = f"{BASE_DIR}/tests/input"
-    TEST_FILES = [str(f) for f in pathlib.Path(INPUT_DIR).iterdir() if f.is_file()]
+    OUTPUT_DIR: str = f"{BASE_DIR}/tests/output"
+    INPUT_DIR: str = f"{BASE_DIR}/tests/input"
+    TEST_FILES: list = [str(f) for f in pathlib.Path(INPUT_DIR).iterdir() if f.is_file()]
 
     print(TEST_FILES, end="\n\n")
     for i in range(len(TEST_FILES)):
         tm = int(time())
-        TARGET_VOSK = f"{OUTPUT_DIR}/test_run_vosk_{tm}.txt"
-        TARGET_GOOGLE = f"{OUTPUT_DIR}/test_run_google_{tm}.txt"
+        TARGET_VOSK: str = f"{OUTPUT_DIR}/test_run_vosk_{tm}.txt"
+        TARGET_GOOGLE: str = f"{OUTPUT_DIR}/test_run_google_{tm}.txt"
 
-        test_inst_vosk = Speech2Text(
+        test_inst_vosk: Speech2Text = Speech2Text(
             mode="rec", loc=TEST_FILES[i], src="vosk", output=TARGET_VOSK
         )
-        test_inst_google = Speech2Text(
+        test_inst_google: Speech2Text = Speech2Text(
             mode="rec", loc=TEST_FILES[i], src="google", output=TARGET_GOOGLE
         )
         print(f"\n\n==================\nIteration:\t{i+1}\n==================")
@@ -179,8 +179,8 @@ def test():
         test_inst_google.file.close()
         test_inst_vosk.file.close()
 
-        t1 = open(TARGET_VOSK).read()
-        t2 = open(TARGET_GOOGLE).read()
+        t1: str = open(TARGET_VOSK).read()
+        t2: str = open(TARGET_GOOGLE).read()
 
         # print("\nTwo files' output being:\n")
         # print(t1, end="\n\n")
@@ -201,7 +201,7 @@ def test():
         "\n\nTaking google speech2text as baseline, average performance of vosk = ", avg
     )
 
-    OUTPUT_FILES = [str(f) for f in pathlib.Path(OUTPUT_DIR).iterdir() if f.is_file()]
+    OUTPUT_FILES: list = [str(f) for f in pathlib.Path(OUTPUT_DIR).iterdir() if f.is_file()]
 
     while len(OUTPUT_FILES) > 0:
         os.remove(OUTPUT_FILES[-1])
@@ -209,7 +209,7 @@ def test():
 
 
 if __name__ == "__main__":
-    n = list(sys.argv)
+    n: list = list(sys.argv)
 
     if len(n) > 1:
         if sys.argv[1] == "--test":
