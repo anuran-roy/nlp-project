@@ -17,7 +17,7 @@ regex==2021.10.8
 sounddevice==0.4.2
 speech-recognition-fork==3.8.1.2021.6.14
 toml==0.10.2
-tqdm==4.62.3
+tqdm==4.66.3
 typing-extensions==3.10.0.2
 vosk==0.3.31
 wrapt==1.12.1
